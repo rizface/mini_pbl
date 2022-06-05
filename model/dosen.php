@@ -1,7 +1,5 @@
 <?php
-require("./interface/basic_crud.php");
-
-class Dosen implements BasicCrud{
+class Dosen{
     /** 
      * Create new dosen data 
      * @param {mysqli | boolean} $conn
@@ -20,5 +18,16 @@ class Dosen implements BasicCrud{
         } catch (\Throwable $th) {
             throw new Exception($th->getMessage(), 1);
         }
+    }
+
+    /**
+     * Get all dosen
+     * @return {array}
+     */
+    static public function findAll($conn) {
+        $query = "SELECT * FROM dosen";
+        $result = mysqli_fetch_all(mysqli_query($conn, $query), MYSQLI_ASSOC);
+
+        return $result;
     }
 }

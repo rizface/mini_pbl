@@ -1,14 +1,6 @@
 <?php
 require("../database/index.php");
 
-$str = 14;
-$encode = base64_encode($str);
-echo $encode;
-echo "<br/>";
-echo base64_decode($encode);
-
-die;
-
 try {
     $conn = createConnection();
 if(!$conn) {

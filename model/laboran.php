@@ -1,7 +1,5 @@
 <?php
-require("./interface/basic_crud.php");
-
-class Laboran implements BasicCrud {
+class Laboran {
     /** 
      * Create new dosen data 
      * @param {mysqli | boolean} $conn

@@ -1,3 +1,6 @@
+<?php
+  $pengajuan = PengajuanController::findAll($conn);
+?>
 <div class="container-fluid">
 
 <!--Header-->
@@ -37,22 +40,21 @@
   <?php require("./view/nav/general/nav.php") ?>
   <!--Content right-->
   <div class="col-sm-9 col-xs-12 content pt-3 pl-0">
-    <h5 class="mb-0"><strong>Detail Kerusakan Barang</strong></h5>
-    <span class="text-secondary">Form Elements <i class="fa fa-angle-right"></i> Kerusakan</span>
+    <h5 class="mb-0"><strong>Informasi Pengajuan Peminjaman</strong></h5>
+    <span class="text-secondary">Form <i class="fa fa-angle-right"></i> Kerusakan</span>
 
     <div class="row mt-3">
       <div class="col-sm-12">
         <!--Default elements-->
         <div class="mt-1 mb-3 p-3 button-container bg-white border shadow-sm">
-          <h6 class="mb-2">Data Kerusakan Barang</h6>
+          <h6 class="mb-2">Data Pengajuan</h6>
 
           <form class="form-horizontal mt-4 mb-5">
-            <table class="table table-striped">
+            <table class="table table-striped table-responsive">
               <tr>
                 <th>NIM</th>
                 <th>Nama Peminjam</th>
                 <th>Dosen</th>
-                <th>Laboran</th>
                 <th>Ruangan</th>
                 <th>Status Pengajuan</th>
                 <th>Status Ruangan</th>
@@ -60,6 +62,25 @@
                 <th>Jam Pemakaian</th>
                 <th>Jam Pengembalian</th>
               </tr>
+              <?php foreach($pengajuan as $p) : ?>
+                <tr>
+                  <td><?= $p["nim"] ?></td>
+                  <td><?= $p["peminjam"] ?></td>
+                  <td><?= $p["dosen"] ?></td>
+                  <td><?= $p["no_ruangan"] ?></td>
+                  <td>
+                    <?php if(!$p["status_pengajuan"]) : ?>
+                      <p class="text-danger">Belum Disetujui</p>
+                    <?php else : ?>
+                      <p class="text-success">Disetujui</p>
+                    <?php endif ?>
+                  </td>
+                  <td><?= $p["status_ruangan"] ?></td>
+                  <td><?= $p["tanggal"] ?></td>
+                  <td><?= $p["jam_pemakaian"]?></td>
+                  <td><?= $p["jam_balik"] ?></td>
+                </tr>
+              <?php endforeach ?>
             </table>
           </form>
         </div>

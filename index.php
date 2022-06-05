@@ -1,11 +1,34 @@
 <?php 
-$p = $_GET["p"];
-$page = "./view/page";
+try {
+    session_start();
 
-if($p !== "login-dosen" && $p !== "login-laboran") {
-    require("./view/template/general/header.php"); 
-} else {
-    require("./view/template/auth/header.php");
+    $p = $_GET["p"];
+    $page = "./view/page";
+
+    // Load Helper
+    require("./helper/helper.php");
+
+    // Load Database Connection
+    require("./database/index.php");
+
+    // Load Model
+    require("./model/dosen.php");
+    require("./model/ruangan.php");
+    require("./model/pengajuan.php");
+
+    // Load Controller
+    require("./controller/pengajuan.php");
+
+    // Create Connection
+    $conn = createConnection();
+
+    if($p !== "login-dosen" && $p !== "login-laboran") {
+        require("./view/template/general/header.php"); 
+    } else {
+        require("./view/template/auth/header.php");
+    }
+} catch (\Throwable $th) {
+    echo $th->getMessage();
 }
 ?>
 
@@ -34,6 +57,5 @@ if(!$isAuthPath) {
 } else {
     require("./view/template/auth/footer.php");
 }
-
 ?>
           

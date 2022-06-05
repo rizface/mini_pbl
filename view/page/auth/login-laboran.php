@@ -1,10 +1,29 @@
 <?php
 
     if(isset($_POST["login"])) {
-        $username = $_POST["username"];
-        $password = $_POST["password"];
-        $hash = password_hash($password,PASSWORD_DEFAULT);
-        echo "<script>alert('$hash')</script>";
+       $nip = $_POST["nip"];
+       $password = $_POST["password"];
+
+       $query = "SELECT * FROM laboran WHERE nip = '$nip'";
+       $result = mysqli_fetch_assoc(mysqli_query($conn, $query));
+
+       if(!isset($result)) {
+           echo "NIP tidak ditemukan";
+       } else {
+           $passwordIsMatch = password_verify($password, $result["password"]);
+           if($passwordIsMatch) {
+            $_SESSION["login"] = true;
+            $_SESSION["nip"] = $result["nidn"];
+            $_SESSION["username"] = $result["username"];
+            $_SESSION["level"] = "laboran";
+
+            echo "berhasil login";
+            die;
+           } else {
+            echo "NIP / Password salah";
+            die;
+           }
+       }
     }
 
 ?>
@@ -22,7 +41,7 @@
             <h3 class="mb-4 text-center">Login Laboran</h3>
             <form action="" method="POST" class="signin-form">
                 <div class="form-group">
-                    <input type="text" name="username" class="form-control" placeholder="Username" required>
+                    <input type="text" name="nip" class="form-control" placeholder="NIP" required>
                 </div>
             <div class="form-group">
                 <input name="password" id="password-field" type="password" class="form-control" placeholder="Password" required>

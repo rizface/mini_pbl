@@ -1,3 +1,16 @@
+<?php
+    $dosen = Dosen::findAll($conn);
+    $ruangan = Ruangan::findAll($conn);
+
+    if(isset($_POST["submit"])) {
+        $isSuccess = PengajuanController::create($conn, $_POST);
+        if($isSuccess) {
+            alert("Data Peminjaman Berhasil Ditambahkan", "?p=papan-informasi");
+        } else {
+            alert("Peminjaman Gagal Diajukan");
+        }
+    }
+?>
 <div class="container-fluid">
 
 <!--Header-->
@@ -48,55 +61,58 @@
                 <div class="mt-1 mb-3 p-3 button-container bg-white border shadow-sm">
                     <h6 class="mb-2">Form Peminjaman Ruangan</h6>
 
-                    <form class="form-horizontal mt-4 mb-5">
+                    <form class="form-horizontal mt-4 mb-5" method="POST" action="">
                         <div class="form-group row">
                             <label class="control-label col-sm-2" for="input-1">Nama</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="input-1"
+                                <input name="nama" type="text" class="form-control" id="input-1"
                                     placeholder="Masukkan Nama" />
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="control-label col-sm-2" for="input-2">Nim</label>
                             <div class="col-sm-10">
-                                <input type="search" class="form-control" id="input-2"
-                                    placeholder="Masukkan Nim" />
+                                <input name="nim" type="search" class="form-control" id="input-2" placeholder="Masukkan Nim" />
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label class="control-label col-sm-2" for="input-3">Dosen</label>
                             <div class="col-sm-10">
-                                <select name="nama_brg" id="nama_brg" class="form-control">
+                                <select name="dosen" id="nama_brg" class="form-control">
                                     <option value="" disabled selected>Dosen Penanggung Jawab</option>
-                                    <option>SWONO SIBAGARIANG,S.Kom., M.Kom</option>
+                                    <?php foreach($dosen as $d) : ?>
+                                        <option value="<?= $d["id_dosen"]; ?>"><?= $d["nama_dosen"]; ?></option>
+                                    <?php endforeach ?>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="control-label col-sm-2" for="input-3">Ruangan</label>
                             <div class="col-sm-10">
-                                <select name="nama_brg" id="nama_brg" class="form-control">
+                                <select name="ruangan" id="nama_brg" class="form-control">
                                     <option value="" disabled selected>Ruangan</option>
-                                    <option>702</option>
+                                    <?php foreach($ruangan as $r) : ?>
+                                        <option value="<?= $r["id_ruangan"] ?>">Ruang <?= $r["no_ruangan"] ?></option>
+                                    <?php endforeach ?>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="control-label col-sm-2" for="input-5">Tanggal Peminjaman</label>
                             <div class="col-sm-10">
-                                <input type="date" class="form-control" id="input-5" placeholder="11/11/2019" />
+                                <input name="tanggal" type="date" class="form-control" id="input-5" placeholder="11/11/2019" />
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="control-label col-sm-2" for="input-6">Jam Peminjaman</label>
                             <div class="col-sm-10">
-                                <input type="time" class="form-control" id="input-6" />
+                                <input name="jam" type="time" class="form-control" id="input-6" />
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-10">
-                                <button type="submit" class="btn btn-dark">Submit</button>
+                                <button name="submit" type="submit" class="btn btn-dark">Submit</button>
                             </div>
                         </div>
                     </form>
