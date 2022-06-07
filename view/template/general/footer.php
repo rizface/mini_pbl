@@ -21,9 +21,13 @@
 
 <!--Custom Js Script-->
 <script src="./assets/general/js/custom.js"></script>
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <!--Custom Js Script-->
 <script>
-  CKEDITOR.replace('editor1');
+  // CKEDITOR.replace('editor1');
+  $(document).ready( function () {
+    $('#myTable').DataTable();
+  } );
 </script>
 </body>
 

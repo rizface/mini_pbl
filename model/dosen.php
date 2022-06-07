@@ -30,4 +30,19 @@ class Dosen{
 
         return $result;
     }
+
+    /**
+     * Find one dosen by username
+     * @param {mysqli | boolean} conn
+     * @param {string} username
+     * @return {array}
+     */
+    static public function findOneByUsername($conn, $username) {
+        $query = "
+            SELECT * FROM dosen WHERE username = '$username'
+        ";
+        $result = mysqli_fetch_assoc(mysqli_query($conn, $query));
+
+        return $result;
+    }
 }

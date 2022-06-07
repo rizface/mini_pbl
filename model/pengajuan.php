@@ -57,4 +57,36 @@ class Pengajuan {
         $result = mysqli_fetch_all(mysqli_query($conn, $query),MYSQLI_ASSOC);
         return $result;
     }
+
+    /**
+     * Find pengajuan by dosen id
+     * @param {mysqli | boolean} conn
+     * @param {integer} idDosen
+     * @return {array}
+     */
+    static public function findByIdDosen($conn, $idDosen) {
+        $query = "
+            SELECT * FROM peminjam INNER JOIN dosen ON dosen.id_dosen = peminjam.id_dosen
+            INNER JOIN ruangan ON ruangan.id_ruangan = peminjam.id_ruangan WHERE peminjam.id_dosen = $idDosen
+        ";
+        $result = mysqli_fetch_all(mysqli_query($conn, $query), MYSQLI_ASSOC);
+
+        return $result;
+    }
+
+     /**
+     * Update status peminjaman
+     * @param {mysqli | boolean} conn
+     * @param {integer} idPinjam
+     * @param {string} status
+     * @return {boolean}
+     */
+    static public function updateStatus($conn, $idPinjam, $status) {
+        $query = "
+            UPDATE peminjam SET persetujuan_dosen = '$status' WHERE id_pinjam = $idPinjam
+        ";
+        $result = mysqli_query($conn, $query);
+
+        return mysqli_affected_rows($conn) > 0;
+    }
 }

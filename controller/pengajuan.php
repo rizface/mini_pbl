@@ -45,4 +45,46 @@ class PengajuanController {
 
         return $pengajuan;
     }
+
+    /**
+     * Find peminjaman by id dosen
+     * @param {mysqli | boolean} conn
+     * @param {integer} idDosen
+     * @return {array}
+     */
+    static public function findByDosenId($conn,$idDosen) {
+        $tmp = Pengajuan::findByIdDosen($conn, $idDosen);
+        $pengajuan = [];
+        $no = 1;
+
+        foreach($tmp as $t) {
+            array_push($pengajuan, [
+                "no" => $no,
+                "id_peminjaman" => $t["id_pinjam"],
+                "nama" => $t["nama"],
+                "nim" => $t["nim"],
+                "dosen" => $t["nama_dosen"],
+                "ruangan" => $t["no_ruangan"],
+                "tanggal_pinjam" => $t["tanggal_pinjam"],
+                "jam_pinjam" => $t["waktu_pinjam"],
+                "status" => $t["persetujuan_dosen"],
+            ]);
+            $no++;
+        }
+
+        return $pengajuan;
+    }
+
+    /**
+     * Update status peminjaman
+     * @param {mysqli | boolean} conn
+     * @param {integer} idPinjam
+     * @param {string} status
+     */
+    static public function updateStatus($conn, $idPinjam, $status) {
+        $decodedIdPinjam = base64_decode($idPinjam);
+        $success = Pengajuan::updateStatus($conn,$decodedIdPinjam, $status);
+
+        return $success;
+    }
 }

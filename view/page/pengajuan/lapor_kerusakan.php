@@ -1,6 +1,6 @@
  <!--Page Wrapper-->
 
- <div class="container-fluid">
+<div class="container-fluid">
 
 <!--Header-->
 <div class="row header shadow-sm">

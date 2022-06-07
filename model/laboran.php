@@ -19,4 +19,18 @@ class Laboran {
             throw new Exception($th->getMessage(), 1);
         }
     }
+
+    /**
+     * Find one laboran by username
+     * @param {mysqli | boolean}
+     * @param {string} username
+     * @return {array}
+     */
+    static public function findOneByUsername($conn, $username) {
+        $query = "
+            SELECT * FROM laboran WHERE username = '$username'
+        ";
+        $result = mysqli_fetch_assoc(mysqli_query($conn,$query));
+        return $result;
+    }
 }
