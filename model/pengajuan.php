@@ -21,21 +21,20 @@ class Pengajuan {
     /**
      * Create new pengajuan
      * @param {mysqli | boolean}
-     * @param {string} nim
-     * @param {string} nama
+     * @param {integer} idMahasiswa
      * @param {integer} ruangan
      * @param {integer} dosen
      * @param {string} tanggal
      * @param {string} jam
      * @return {boolean} 
      */
-    public static function create($conn, $nim, $nama, $ruangan, $dosen, $tanggal, $jam) {
+    public static function create($conn, $idMahasiswa, $ruangan, $dosen, $tanggal, $jam) {
         $query = "
             INSERT INTO peminjam (
-                nim, nama, id_ruangan, id_dosen, tanggal_pinjam, waktu_pinjam
+                id_mahasiswa, id_ruangan, id_dosen, tanggal_pinjam, waktu_pinjam
             )
             VALUES(
-                '$nim', '$nama', $ruangan, $dosen, '$tanggal', '$jam'      
+                $idMahasiswa, $ruangan, $dosen, '$tanggal', '$jam'      
             )
         ";
 
@@ -49,10 +48,13 @@ class Pengajuan {
      * @param {mysqli | boolean}
      * @return {array}
      */
-    static public function findAll($conn) {
+    static public function findMySubmission($conn) {
         $query = "
-            SELECT * FROM peminjam INNER JOIN ruangan ON ruangan.id_ruangan = peminjam.id_ruangan
+            SELECT mahasiswa.nim, mahasiswa.nama as nama_mahasiswa, peminjam.*,dosen.*, ruangan.* FROM 
+            peminjam 
+            INNER JOIN ruangan ON ruangan.id_ruangan = peminjam.id_ruangan
             INNER JOIN dosen ON dosen.id_dosen = peminjam.id_dosen 
+            INNER JOIN mahasiswa ON mahasiswa.id_mahasiswa = peminjam.id_mahasiswa
         ";
         $result = mysqli_fetch_all(mysqli_query($conn, $query),MYSQLI_ASSOC);
         return $result;
@@ -66,8 +68,34 @@ class Pengajuan {
      */
     static public function findByIdDosen($conn, $idDosen) {
         $query = "
-            SELECT * FROM peminjam INNER JOIN dosen ON dosen.id_dosen = peminjam.id_dosen
-            INNER JOIN ruangan ON ruangan.id_ruangan = peminjam.id_ruangan WHERE peminjam.id_dosen = $idDosen
+            SELECT mahasiswa.nama as nama_mahasiswa, mahasiswa.nim, dosen.*, peminjam.* FROM 
+            peminjam 
+            INNER JOIN dosen ON dosen.id_dosen = peminjam.id_dosen
+            INNER JOIN ruangan ON ruangan.id_ruangan = peminjam.id_ruangan 
+            INNER JOIN mahasiswa ON mahasiswa.id_mahasiswa = peminjam.id_mahasiswa
+            WHERE peminjam.id_dosen = $idDosen
+        ";
+        $result = mysqli_fetch_all(mysqli_query($conn, $query), MYSQLI_ASSOC);
+
+        return $result;
+    }
+
+    /**
+     * Find pengajuan by laboran id
+     * @param {mysqli | boolean} conn
+     * @param {integer} idLaboran
+     * @param {string} status
+     * @return {array}
+     */
+    static public function findByIdLaboran($conn, $idLaboran, $status) {
+        $query = "
+            SELECT mahasiswa.nama as nama_mahasiswa, mahasiswa.nim, dosen.*, peminjam.*, ruangan.* 
+            FROM 
+            peminjam 
+            INNER JOIN dosen ON dosen.id_dosen = peminjam.id_dosen
+            INNER JOIN ruangan ON ruangan.id_ruangan = peminjam.id_ruangan 
+            INNER JOIN mahasiswa ON mahasiswa.id_mahasiswa = peminjam.id_mahasiswa
+            WHERE ruangan.id_laboran = $idLaboran AND persetujuan_dosen = '$status'
         ";
         $result = mysqli_fetch_all(mysqli_query($conn, $query), MYSQLI_ASSOC);
 
@@ -83,7 +111,23 @@ class Pengajuan {
      */
     static public function updateStatus($conn, $idPinjam, $status) {
         $query = "
-            UPDATE peminjam SET persetujuan_dosen = '$status' WHERE id_pinjam = $idPinjam
+            UPDATE peminjam SET $status WHERE id_pinjam = $idPinjam
+        ";
+        $result = mysqli_query($conn, $query);
+
+        return mysqli_affected_rows($conn) > 0;
+    }
+
+     /**
+     * Update Waktu Balik
+     * @param {mysqli | boolean} conn
+     * @param {integer} idPinjam
+     * @param {string} waktuBalik
+     * @return {boolean}
+     */
+    static public function updateWaktuBalik($conn, $idPinjam, $waktuBalik) {
+        $query = "
+            UPDATE peminjam SET waktu_balik = '$waktuBalik' WHERE id_pinjam = $idPinjam
         ";
         $result = mysqli_query($conn, $query);
 

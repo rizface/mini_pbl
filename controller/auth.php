@@ -30,6 +30,7 @@ class AuthController {
             $_SESSION = [
                 "login" => true,
                 "username" => $username,
+                "level" => $level
             ];
             if($level === "dosen") {
                 $_SESSION["id_dosen"] = $account["id_dosen"]; 
@@ -38,6 +39,10 @@ class AuthController {
             } else if($level === "laboran") {
                 $_SESSION["id_laboran"] = $account["id_laboran"];
                 $_SESSION["nip"] = $account["nip"];
+            } else if($level === "mahasiswa") {
+                $_SESSION["id_mahasiswa"] = $account["id_mahasiswa"];
+                $_SESSION["nim"] = $account["nim"];
+                $_SESSION["nama"] = $account["nama"];
             }
             return true;
         } else {

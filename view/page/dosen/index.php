@@ -6,6 +6,7 @@
     $idPinjam = $_GET["id_pinjam"];
     $status = $_GET["status"];
     if(isset($idPinjam) && isset($status)) {
+        $status = "persetujuan_dosen = '$status'";
         $success = PengajuanController::updateStatus($conn, $idPinjam, $status);
         if($success) {
             alert("Status Peminjaman Berhasil Diupdate", "?p=dosen");
@@ -95,7 +96,7 @@
                                 <?php foreach($pengajuan as $p) : ?>
                                     <tr>
                                         <td><?= $p["no"] ?></td>
-                                        <td><?= $p["nama"] ?></td>
+                                        <td><?= $p["mahasiswa"] ?></td>
                                         <td><?= $p["nim"] ?></td>
                                         <td><?= $p["dosen"] ?></td>
                                         <td><?= $p["ruangan"] ?></td>

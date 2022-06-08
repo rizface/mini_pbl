@@ -19,7 +19,7 @@ try {
     require("./model/ruangan.php");
     require("./model/pengajuan.php");
     require("./model/laboran.php");
-    require("./model/mahasiswa.php.php");
+    require("./model/mahasiswa.php");
 
     // Load Controller
     require("./controller/pengajuan.php");
@@ -42,7 +42,7 @@ try {
 try {
     if(!isset($p) || $p === "login") {
         require("$page/auth/login.php");
-    }else if($p === "pengajuan") {
+    }else if($p === "mahasiswa") {
         auth();
         require("$page/pengajuan/pengajuan.php");
     } else if($p === "papan-informasi") {
@@ -54,7 +54,10 @@ try {
     } else if($p === "dosen") {
         auth();
         require("$page/dosen/index.php");
-    } elseif($p === "logout") {
+    } else if($p === "laboran") {
+        auth();
+        require("$page/laboran/index.php");
+    } else if($p === "logout") {
         auth();
         session_destroy();
         $_SESSION = [];

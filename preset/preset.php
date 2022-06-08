@@ -32,6 +32,15 @@ $dataRuang = [
     ]
 ];
 
+$dataMahasiswa = [
+    [
+        "nama" => "muhammad al farizzi",
+        "nim" => "3312101017",
+        "username" => "mahasiswa1",
+        "password" => password_hash("mahasiswa1", PASSWORD_DEFAULT)
+    ]
+];
+
 $laboran = [];
 
 // Input data dosen
@@ -61,6 +70,19 @@ foreach ($dataRuang as $key => $ruangan) {
     $idLaboran = $laboran[$key];
 
     $query = "INSERT INTO ruangan (id_laboran, no_ruangan) VALUES($idLaboran, $noRuangan)";
+    mysqli_query($conn, $query);
+}
+
+// Input data ruangan
+foreach ($dataMahasiswa as $m) {
+    $nama = $m["nama"];
+    $nim = $m["nim"];
+    $password = $m["password"];
+    $username = $m["username"];
+
+    $query = "
+        INSERT INTO mahasiswa (nama, nim, username, password) VALUES('$nama', '$nim', '$username', '$password')
+    ";
     mysqli_query($conn, $query);
 }
 

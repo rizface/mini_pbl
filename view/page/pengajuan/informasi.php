@@ -1,5 +1,6 @@
 <?php
-  $pengajuan = PengajuanController::findAll($conn);
+  $idMahasiswa = $_SESSION["id_mahasiswa"];
+  $pengajuan = PengajuanController::findMySubmission($conn, $idMahasiswa);
 ?>
 <div class="container-fluid">
 
@@ -65,7 +66,7 @@
               <?php foreach($pengajuan as $p) : ?>
                 <tr>
                   <td><?= $p["nim"] ?></td>
-                  <td><?= $p["peminjam"] ?></td>
+                  <td><?= $p["mahasiswa"] ?></td>
                   <td><?= $p["dosen"] ?></td>
                   <td><?= $p["no_ruangan"] ?></td>
                   <td>

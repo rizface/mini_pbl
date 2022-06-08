@@ -2,8 +2,7 @@
 
 class PengajuanController {
     static public function create($conn, $data) {
-        $nama = $data["nama"];
-        $nim = $data["nim"];
+        $idMahasiswa = $_SESSION["id_mahasiswa"];
         $dosen = $data["dosen"];
         $ruangan = $data["ruangan"];
         $tanggal = $data["tanggal"];
@@ -14,18 +13,19 @@ class PengajuanController {
         if($submissionIsExists) {
             return false;
         } else {
-            $isSuccess = Pengajuan::create($conn, $nim, $nama, $ruangan, $dosen, $tanggal, $jam);
+            $isSuccess = Pengajuan::create($conn, $idMahasiswa, $ruangan, $dosen, $tanggal, $jam);
             return $isSuccess;
         }
     }
 
     /**
-     * Find all pengajuan
+     * Find user submission
      * @param {mysqli | boolean}
+     * @param {integer} idMahasiswa
      * @return {array}
      */
-    static public function findAll($conn) {
-        $tmpResult = Pengajuan::findAll($conn);
+    static public function findMySubmission($conn, $idMahasiswa) {
+        $tmpResult = Pengajuan::findMySubmission($conn, $idMahasiswa);
         $pengajuan = [];
 
         foreach($tmpResult as $t) {
@@ -35,14 +35,14 @@ class PengajuanController {
                 "peminjam" => $t["nama"],
                 "no_ruangan" => $t["no_ruangan"],
                 "dosen" => $t["nama_dosen"],
-                "status_pengajuan" => $t["persetujuan_dosen"] && $t["persetjuan_laboran"] ? true : false,
+                "mahasiswa" => $t["nama_mahasiswa"],
+                "status_pengajuan" => $t["persetujuan_dosen"] === "disetujui"&& $t["persetujuan_laboran"] === "disetujui"? true : false,
                 "status_ruangan" => is_string($t["status_ruangan"]) ? "Sedang Digunakan" : "Tidak Digunakan",
                 "jam_pemakaian" => $t["waktu_pinjam"],
                 "jam_balik" => is_null($t["waktu_balik"]) ? "-" : $t["waktu_balik"],
                 "tanggal" => $t["tanggal_pinjam"]
             ]);
         }
-
         return $pengajuan;
     }
 
@@ -61,8 +61,8 @@ class PengajuanController {
             array_push($pengajuan, [
                 "no" => $no,
                 "id_peminjaman" => $t["id_pinjam"],
-                "nama" => $t["nama"],
                 "nim" => $t["nim"],
+                "mahasiswa" => $t["nama_mahasiswa"],
                 "dosen" => $t["nama_dosen"],
                 "ruangan" => $t["no_ruangan"],
                 "tanggal_pinjam" => $t["tanggal_pinjam"],
@@ -71,9 +71,39 @@ class PengajuanController {
             ]);
             $no++;
         }
-
         return $pengajuan;
     }
+
+    /**
+     * Find peminjaman by id laboran
+     * @param {mysqli | boolean} conn
+     * @param {integer} idLaboran
+     * @return {array}
+     */
+    static public function findByLaboranId($conn,$idLaboran) {
+        $tmp = Pengajuan::findByIdLaboran($conn, $idLaboran, 'disetujui');
+        $pengajuan = [];
+        $no = 1;
+
+        foreach($tmp as $t) {
+            array_push($pengajuan, [
+                "no" => $no,
+                "id_peminjaman" => $t["id_pinjam"],
+                "nim" => $t["nim"],
+                "mahasiswa" => $t["nama_mahasiswa"],
+                "dosen" => $t["nama_dosen"],
+                "ruangan" => $t["no_ruangan"],
+                "tanggal_pinjam" => $t["tanggal_pinjam"],
+                "jam_pinjam" => $t["waktu_pinjam"],
+                "status" => $t["persetujuan_dosen"],
+                "persetujuan_laboran" => $t["persetujuan_laboran"],
+                "status_pengajuan" => $t["persetujuan_dosen"] === "disetujui" && $t["persetujuan_laboran"] === "disetujui"? true : false,
+            ]);
+            $no++;
+        }
+        return $pengajuan;
+    }
+
 
     /**
      * Update status peminjaman

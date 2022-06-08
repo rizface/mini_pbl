@@ -63,20 +63,6 @@
 
                     <form class="form-horizontal mt-4 mb-5" method="POST" action="">
                         <div class="form-group row">
-                            <label class="control-label col-sm-2" for="input-1">Nama</label>
-                            <div class="col-sm-10">
-                                <input name="nama" type="text" class="form-control" id="input-1"
-                                    placeholder="Masukkan Nama" />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="control-label col-sm-2" for="input-2">Nim</label>
-                            <div class="col-sm-10">
-                                <input name="nim" type="search" class="form-control" id="input-2" placeholder="Masukkan Nim" />
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
                             <label class="control-label col-sm-2" for="input-3">Dosen</label>
                             <div class="col-sm-10">
                                 <select name="dosen" id="nama_brg" class="form-control">
