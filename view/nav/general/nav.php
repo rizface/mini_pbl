@@ -53,6 +53,38 @@
                                         </a>
                                     </li>
                                 </ul>
+                            <?php elseif($_SESSION["login"] === true && $_SESSION["level"] === "laboran") : ?>
+                                <a href="#" onclick="toggle_menu('form_element'); return false" class="">
+                                    <i class="fa fa-pencil-square mr-3"></i>
+                                    <span class="none">Data 
+                                        <i class="fa fa-angle-down pull-right align-bottom"></i>
+                                    </span>
+                                </a>
+                                <ul class="children" id="form_element">
+                                    <li class="child">
+                                        <a href="?p=laboran" class="ml-4">
+                                            <i class="fa fa-angle-right mr-2"></i> Peminjaman
+                                        </a>
+                                    </li>
+                                    <li class="child">
+                                        <a href="pengajuan.html" class="ml-4">
+                                        <i class="fa fa-angle-right mr-2"></i>
+                                            Pengajuan
+                                        </a>
+                                    </li>
+                                    <li class="child">
+                                        <a href="kerusakan.html" class="ml-4">
+                                        <i class="fa fa-angle-right mr-2"></i>
+                                            Kerusakan
+                                        </a>
+                                    </li>
+                                    <li class="child">
+                                        <a href="sparepart.html" class="ml-4">
+                                            <i class="fa fa-angle-right mr-2"></i>
+                                            Sparepart
+                                        </a>
+                                    </li>
+                                </ul>
                             <?php endif ?>
                             <a href="?p=logout" class="">
                                 <span class="none">Logout

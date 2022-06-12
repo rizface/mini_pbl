@@ -318,6 +318,7 @@ $(document).ready(function() {
 
 /*========== Toggle Sidebar width ============ */
 function toggle_sidebar() {
+    console.log("masuk")
     $('#sidebar-toggle-btn').toggleClass('slide-in');
     $('.sidebar').toggleClass('shrink-sidebar');
     $('.content').toggleClass('expand-content');

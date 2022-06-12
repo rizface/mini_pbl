@@ -48,18 +48,6 @@
                         <!--Toggle sidebar-->
                     </div>
                     <!--Menu Icons-->
-
-                    <!--Search box and avatar-->
-                    <div class="col-sm-8 col-4 text-right flex-header-menu justify-content-end">
-                        <div class="mr-4">
-                            <button type="submit" class="btn btn-danger">Logout</button>
-                            <div class="dropdown-menu dropdown-menu-right mt-13" aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#"><i class="fa fa-power-off pr-2"></i> Logout</a>
-                            </div>
-                        </div>
-                    </div>
-                    <!--Search box and avatar-->
                 </div>
             </div>
             <!--Header Menu-->

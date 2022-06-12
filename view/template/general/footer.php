@@ -24,10 +24,23 @@
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <!--Custom Js Script-->
 <script>
-  // CKEDITOR.replace('editor1');
+  CKEDITOR.replace('editor1');
   $(document).ready( function () {
     $('#myTable').DataTable();
   } );
+</script>
+<script>
+  function toggle_sidebar() {
+    document.getElementById("form_element").style.display = "none";
+    $('#sidebar-toggle-btn').toggleClass('slide-in');
+    $('.sidebar').toggleClass('shrink-sidebar');
+    $('.content').toggleClass('expand-content');
+    
+    //Resize inline dashboard charts
+    $('#incomeBar canvas').css("width","100%");
+    $('#expensesBar canvas').css("width","100%");
+    $('#profitBar canvas').css("width","100%");
+}
 </script>
 </body>
 

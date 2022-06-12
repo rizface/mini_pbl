@@ -1,4 +1,46 @@
- <!--Page Wrapper-->
+<?php
+  if(isset($_POST["submit"])) {
+    $file = $_FILES["foto_kerusakan"];
+    $size = $file["size"];
+    $tmpPath = $file["tmp_name"];
+    $mimeType = mime_content_type($tmpPath);
+    
+    $allowedMimeType = [
+      "image/png", "image/jpg", "image/jpeg"
+    ];
+    $sizeIsAllowed = $size <= 2000000;
+    $mimeIsAllowed = array_search($mimeType,$allowedMimeType);
+
+    if($sizeIsAllowed && $mimeIsAllowed !== false) {
+      $fileExtension = explode(".",$file["name"]);
+      $randomizeFileName = base64_encode($file["name"].$tmpPath).".".end($fileExtension);
+      $uploadPath = "assets/uploaded/$randomizeFileName";
+      $success = move_uploaded_file($tmpPath, $uploadPath);
+      if($success) {
+        $idPinjam = explode(".",base64_decode($_POST["kode_pinjam"]))[0];
+        $keterangan = $_POST["keterangan"];
+        $data = [
+          "id_pinjam" => $idPinjam,
+          "kerusakan" => $keterangan,
+          "foto" => $uploadPath
+        ];
+
+        $success = KerusakanController::create($conn, $data);
+        if($success) {
+          alert("Pelaporan Kerusakan Berhasil");
+        } else {
+          unlink($uploadPath);
+          alert("Pelaporan Kerusakan Gagal");
+        } 
+      } else {
+        alert("Upload File Gagal");
+      }
+    } else {
+      alert("Pelaporan Kerusakan Gagal Diajukan");
+    }
+  }
+?>
+<!--Page Wrapper-->
 
 <div class="container-fluid">
 
@@ -49,32 +91,30 @@
         <div class="mt-1 mb-3 p-3 button-container bg-white border shadow-sm">
           <h6 class="mb-2">Form Laporan Kerusakan</h6>
 
-          <form class="form-horizontal mt-4 mb-5">
+          <form class="form-horizontal mt-4 mb-5" method="post" action="" enctype="multipart/form-data">
             <div class="form-group row">
-              <label class="control-label col-sm-2" for="input-1">No Peminjam</label>
+              <label class="control-label col-sm-2" for="input-1">Kode Peminjam</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="input-1" placeholder="Masukkan No Peminjam" />
+                <input name="kode_pinjam" type="text" class="form-control" id="input-1" placeholder="Masukkan Kode Peminjaman" />
               </div>
             </div>
 
             <div class="form-group row">
               <label class="control-label col-sm-2" for="input-1">Detail Kerusakan</label>
               <div class="col-sm-10">
-                <textarea name="editor1"></textarea>
+                <textarea name="keterangan" name="editor1"></textarea>
               </div>
             </div>
 
             <div class="form-group row">
               <label class="control-label col-sm-2" for="input-1">Foto Kerusakan</label>
               <div class="col-sm-10">
-                <input type="file" class="form-control" id="input-1" />
+                <input name="foto_kerusakan" type="file" class="form-control" id="input-1" />
               </div>
             </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-sm-10">
-            <button type="submit" class="btn btn-dark">Submit</button>
-          </div>
+            <div class="form-group">
+                <button name="submit" type="submit" class="btn btn-dark">Submit</button>
+            </div>
         </div>
         </form>
       </div>

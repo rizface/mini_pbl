@@ -20,10 +20,12 @@ try {
     require("./model/pengajuan.php");
     require("./model/laboran.php");
     require("./model/mahasiswa.php");
+    require("./model/laporan.php");
 
     // Load Controller
     require("./controller/pengajuan.php");
     require("./controller/auth.php");
+    require("./controller/kerusakan.php");
 
     // Create Connection
     $conn = createConnection();

@@ -54,6 +54,7 @@
             <table class="table table-striped table-responsive">
               <tr>
                 <th>NIM</th>
+                <th>Kode Peminjaman</th>
                 <th>Nama Peminjam</th>
                 <th>Dosen</th>
                 <th>Ruangan</th>
@@ -66,6 +67,9 @@
               <?php foreach($pengajuan as $p) : ?>
                 <tr>
                   <td><?= $p["nim"] ?></td>
+                  <td>
+                    <?= base64_encode($p["id_pinjam"].".random") ?>
+                  </td>
                   <td><?= $p["mahasiswa"] ?></td>
                   <td><?= $p["dosen"] ?></td>
                   <td><?= $p["no_ruangan"] ?></td>

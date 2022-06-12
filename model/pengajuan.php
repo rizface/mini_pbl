@@ -133,4 +133,18 @@ class Pengajuan {
 
         return mysqli_affected_rows($conn) > 0;
     }
+
+    /**
+     * Chec if data is exists
+     * @param {mysqli | boolean} conn
+     * @param {integer} idPinjam
+     * @return {boolean}
+     */
+    static public function findOneById($conn, $idPinjam) {
+        $query = "
+            SELECT * FROM peminjam WHERE id_pinjam = $idPinjam
+        ";
+        $result = mysqli_fetch_assoc(mysqli_query($conn, $query));
+        return $result;
+    }
 }
