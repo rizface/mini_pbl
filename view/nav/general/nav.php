@@ -73,15 +73,15 @@
                                         </a>
                                     </li>
                                     <li class="child">
-                                        <a href="kerusakan.html" class="ml-4">
+                                        <a href="?p=list-kerusakan" class="ml-4">
                                         <i class="fa fa-angle-right mr-2"></i>
                                             Kerusakan
                                         </a>
                                     </li>
                                     <li class="child">
-                                        <a href="sparepart.html" class="ml-4">
+                                        <a href="?p=peralatan" class="ml-4">
                                             <i class="fa fa-angle-right mr-2"></i>
-                                            Sparepart
+                                            Peralatan
                                         </a>
                                     </li>
                                 </ul>

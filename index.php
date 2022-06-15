@@ -21,11 +21,14 @@ try {
     require("./model/laboran.php");
     require("./model/mahasiswa.php");
     require("./model/laporan.php");
+    require("./model/peralatan.php");
 
     // Load Controller
     require("./controller/pengajuan.php");
     require("./controller/auth.php");
     require("./controller/kerusakan.php");
+    require("./controller/ruangan.php");
+    require("./controller/peralatan.php");
 
     // Create Connection
     $conn = createConnection();
@@ -59,6 +62,12 @@ try {
     } else if($p === "laboran") {
         auth();
         require("$page/laboran/index.php");
+    } else if($p === "list-kerusakan") {
+        auth();
+        require("$page/laboran/kerusakan.php");
+    } else if($p === "peralatan") {
+        auth();
+        require("$page/laboran/peralatan.php");
     } else if($p === "logout") {
         auth();
         session_destroy();

@@ -76,12 +76,19 @@
                         <div class="form-group row">
                             <label class="control-label col-sm-2" for="input-3">Ruangan</label>
                             <div class="col-sm-10">
-                                <select name="ruangan" id="nama_brg" class="form-control">
-                                    <option value="" disabled selected>Ruangan</option>
-                                    <?php foreach($ruangan as $r) : ?>
-                                        <option value="<?= $r["id_ruangan"] ?>">Ruang <?= $r["no_ruangan"] ?></option>
-                                    <?php endforeach ?>
-                                </select>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <select name="ruangan" id="ruangan" class="form-control">
+                                            <?php foreach($ruangan as $r) : ?>
+                                                <option value="<?= $r["id_ruangan"] ?>">Ruang <?= $r["no_ruangan"] ?></option>
+                                            <?php endforeach ?>
+                                        </select>
+
+                                        <a id="cek-alat" class="btn btn-primary text-white"  data-toggle="modal" data-target="#exampleModal">
+                                         Lihat Peralatan     
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -120,6 +127,26 @@
         </div>
 
         <!--Main Content-->
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nama Alat</th>
+                                <th>Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody id="list-alat">
+
+                        </tbody>
+                    </table>                                                    
+                </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>

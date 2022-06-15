@@ -12,4 +12,19 @@ class Ruangan {
 
         return $result;
     }
+
+    /**
+     * Find by laboran id
+     * @param {mysqli | boolean} conn
+     * @param {string} idLaboran
+     * @return {array} 
+     */
+    static public function findBuLaboranId($conn, $idLaboran) {
+        $query = "
+            SELECT * FROM ruangan WHERE id_laboran = $idLaboran
+        ";
+        $result = mysqli_fetch_all(mysqli_query($conn, $query),MYSQLI_ASSOC);
+        
+        return $result;
+    }
 }

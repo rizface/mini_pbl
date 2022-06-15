@@ -23,8 +23,18 @@
 <script src="./assets/general/js/custom.js"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <!--Custom Js Script-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js" integrity="sha512-xIPqqrfvUAc/Cspuj7Bq0UtHNo/5qkdyngx6Vwt+tmbvTLDszzXM0G6c91LXmGrRx8KEPulT+AfOOez+TeVylg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-  CKEDITOR.replace('editor1');
+  const editor1 = Array.from(document.getElementsByName("editor1")).length;
+  if(editor1 > 0) {
+    CKEDITOR.replace('editor1');
+  }
+
+  const keterangan = Array.from(document.getElementsByName("keterangan")).length;
+  if(keterangan > 0) {
+    CKEDITOR.replace('keterangan');
+  }
+
   $(document).ready( function () {
     $('#myTable').DataTable();
   } );
@@ -41,6 +51,127 @@
     $('#expensesBar canvas').css("width","100%");
     $('#profitBar canvas').css("width","100%");
 }
+</script>
+
+<script>
+    const btns = Array.from(document.querySelectorAll("#detail-kerusakan"));
+
+    btns.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        const {idRusak} = e.target.dataset;
+        const result = await axios({
+          method: 'get',
+          url: `api/kerusakan.php?id_rusak=${idRusak}`
+        })
+
+        const {data} = result;
+
+        const namaPeminjam = document.getElementById("namaPeminjam");
+        const nim = document.getElementById("nim");
+        const noRuangan = document.getElementById("noRuangan");
+        const detail = document.getElementById("detail_kerusakan");
+        const idRusakField = document.getElementById("id_rusak");
+        const detailPerbaikanInput = document.getElementById("detail_perbaikan_input");
+
+        namaPeminjam.value = data.nama;
+        nim.value = data.nim;
+        noRuangan.value = data.no_ruangan;
+        detail.innerHTML = data.detail_rusak;
+        idRusakField.value = data.id_rusak
+        detailPerbaikanInput.value = data.detail_perbaikan
+      })
+    })
+</script>
+
+<script>
+  function setStokValue(target, action) {
+      const { idAlat } = target.target.dataset
+      const stokParent = document.getElementById(`jumlah-${idAlat}`)
+      let stok = Number(stokParent.innerText)
+
+      if(action === "tambah") {
+        stok += 1;
+      } else {
+        stok -= 1;
+      }
+      
+      stokParent.innerText = stok.toString()
+      return {stok, idAlat}
+  }
+
+  async function updateStok(payload) {
+      const res = await axios({
+          method: "post",
+          url : "api/peralatan-update.php",
+          data: payload
+      })
+
+      const {success} = res.data;
+      return success
+  }
+
+  const btnsTambah = Array.from(document.querySelectorAll("#tambahStok"))
+  const btnsKurang = Array.from(document.querySelectorAll("#kurangStok"))
+  const btnsHapus = Array.from(document.querySelectorAll("#hapusAlat"))
+
+    btnsTambah.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        const payload = setStokValue(e, "tambah")
+        await updateStok(payload)
+      })
+    })
+
+    btnsKurang.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        const payload = setStokValue(e, "kurang")
+        const success = await updateStok(payload)
+
+        if(success && payload.stok <= 0) {
+          const row = document.getElementById(`row-${payload.idAlat}`)
+          row.remove()
+        }
+      })
+    })
+
+    btnsHapus.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        const {idAlat} = e.target.dataset;
+        const row = document.getElementById(`row-${idAlat}`)
+        row.remove()
+        await axios({
+          method: "post",
+          url: "api/peralatan-hapus.php",
+          data: {
+            idAlat
+          }
+        })
+      })
+    })
+</script>
+
+<script>
+  const btn = document.getElementById("cek-alat");
+  btn.addEventListener("click", async(e) => {
+    const tbody = document.getElementById("list-alat");
+    tbody.innerHTML = "";
+
+    const idRuangan = document.getElementById("ruangan").value
+    const res = await axios({
+      method: "get",
+      url: `api/peralatan-get.php?id_ruangan=${idRuangan}`
+    })
+    const {data} = res;
+
+    data.forEach(d => {
+      const row = `
+        <tr>
+          <td>${d.nama_alat}</td>
+          <td>${d.jumlah}</td>
+        </tr>
+      `
+      tbody.innerHTML += row;
+    })
+  })
 </script>
 </body>
 

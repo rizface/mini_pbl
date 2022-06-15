@@ -17,4 +17,36 @@ class Laporan {
         $resut = mysqli_query($conn,$query);
         return mysqli_affected_rows($conn) > 0;
     }    
+
+    /**
+     * Find all laporan kerusakan by id laboran
+     * @param {mysqli | boolean} conn
+     * @param {integer} idLaboran
+     * @return {array}
+     */
+    static public function findByIdLaboran($conn, $idLaboran) {
+        $query = "
+            SELECT * FROM kerusakan
+            INNER JOIN ruangan ON ruangan.id_ruangan = kerusakan.id_ruangan 
+            WHERE ruangan.id_laboran = $idLaboran
+        ";
+        $result = mysqli_fetch_all(mysqli_query($conn, $query), MYSQLI_ASSOC);
+        return $result;  
+    }
+
+    /**
+     * Insert solution
+     * @param {mysqli | boolean} conn
+     * @param {array} data
+     */
+    static public function insertSolution($conn, $data) {
+        $idRusak = $data["id_rusak"];
+        $detail = $data["perbaikan"];
+        $query = "
+            UPDATE kerusakan SET detail_perbaikan = '$detail' WHERE id_rusak = $idRusak
+        ";
+
+        mysqli_query($conn, $query);
+        return mysqli_affected_rows($conn) > 0;
+    }
 }
