@@ -22,6 +22,8 @@ try {
     require("./model/mahasiswa.php");
     require("./model/laporan.php");
     require("./model/peralatan.php");
+    require("./model/kerusakan_sparepart.php");
+    require("./model/sparepart.php");
 
     // Load Controller
     require("./controller/pengajuan.php");

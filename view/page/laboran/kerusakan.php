@@ -8,6 +8,18 @@
       }
     }
 
+    $action = $_GET["action"];
+    $idRusak = $_GET["id_rusak"];
+
+    if(isset($action) && $action === "delete" && isset($idRusak)) {
+      $success = KerusakanController::delete($conn, $idRusak);
+      if($success) {
+        alert("Laporan Kerusakan Berhasil Dihapus", "?p=list-kerusakan");
+      } else {
+        alert("Laporan Kerusakan Gagal Dihapus", "?p=list-kerusakan");
+      }
+    }
+
 ?>
 <div class="container-fluid">
 <!--Header-->
@@ -76,12 +88,74 @@
                       </div>
                       <div class="form-group">
                         <label class="form-label">Detail Kerusakan</label>
-                        <div id="detail_kerusakan" class="container" style="height: 150px;overflow-y: scroll;" ></div>
+                        <div class="accordion" id="accordionExample">
+                          <div class="card">
+                            <div class="card-header" id="headingOne">
+                              <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                  Klik Disini Untuk Melihat Detail Kerusakan
+                                </button>
+                              </h2>
+                            </div>
+                            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                              <div class="card-body" id="detail_kerusakan">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                       <input type="hidden" name="id_rusak" id="id_rusak">
                       <div class="form-group">
                         <label for="" class="form-label">Langkah Perbaikan</label>
-                        <textarea class="form-control" name="detail_perbaikan" id="detail_perbaikan_input" cols="30" rows="10"></textarea>
+                        <div class="accordion" id="accordionExample">
+                          <div class="card">
+                              <div class="card-header" id="headingTwo">
+                                <h2 class="mb-0">
+                                  <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Klik Disini Untuk Memasukan Langkah Perbaikan
+                                  </button>
+                                </h2>
+                              </div>
+                              <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                <div class="card-body">
+                                <textarea class="form-control" name="detail_perbaikan" id="detail_perbaikan_input" cols="30" rows="10"></textarea>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="">Sparepart Yang Digunakan Dalam Perbaikan</label>
+                        <div class="accordion" id="accordionExample">
+                          <div class="card">
+                            <div class="card-header" id="headingThree">
+                              <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                  Klik Disini Untuk Meilihat Sparepart Yang Digunakan Dalam Perbaikan
+                                </button>
+                              </h2>
+                            </div>
+                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                              <div class="card-body">
+                                <table class="display" id="myTable2">
+                                  <thead>
+                                    <tr>
+                                      <th>Nama</th>
+                                      <th>Jumlah</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody id="in-use-sparepart"></tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group" >
+                          <div id="sparepart">
+                            <label for="">Tambah Sparepart Yang Digunakan</label>
+                          </div>
+                          <a href="" class="btn btn-primary btn-sm" id="tambah-sparepart">Tambah</a>
                       </div>
                       <div class="form-group">
                         <button type="submit" class="btn btn-primary btn-sm" name="submit">Submit</button>
@@ -108,6 +182,9 @@
                           </td>
                           <td>
                             <a id="detail-kerusakan" data-id-rusak="<?= $k["id_rusak"] ?>" href="#" class="btn btn-primary btn-sm text-white" data-toggle="modal" data-target="#exampleModal">Detail</a>
+                            <a href="?p=list-kerusakan&action=delete&id_rusak=<?= $k["id_rusak"] ?>" onclick="return confirm('Yakin Ingin Menghapus Data Ini ?')" class="btn btn-danger btn-sm text-white">
+                              Hapus
+                            </a>
                           </td>
                       </tr>
                   <?php endforeach ?>

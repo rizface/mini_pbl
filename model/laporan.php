@@ -49,4 +49,30 @@ class Laporan {
         mysqli_query($conn, $query);
         return mysqli_affected_rows($conn) > 0;
     }
+
+    /**
+     * Find laporan by id 
+     * @param {mysqli | boolean} conn
+     * @param {integer} idRusak
+     */
+    static public function findById($conn, $idRusak) {
+        $query = "
+            SELECT * FROM kerusakan WHERE id_rusak = $idRusak
+        ";
+        $result = mysqli_fetch_assoc(mysqli_query($conn,$query));
+        return $result;
+    }
+
+    /**
+     * Delete laporan
+     * @param {mysqli | boolean} conn
+     * @param {integer} idRusak
+     */
+    static public function delete($conn, $idRusak) {
+        $query = "
+            DELETE FROM kerusakan WHERE id_rusak = $idRusak
+        ";
+        mysqli_query($conn, $query);
+        return mysqli_affected_rows($conn) > 0;
+    }
 }

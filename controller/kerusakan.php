@@ -62,6 +62,39 @@ class KerusakanController {
             "id_rusak" => $data["id_rusak"],
             "perbaikan" => $data["detail_perbaikan"]
         ];
-        return Laporan::insertSolution($conn, $dataMap);
+        $laporaIsSuccess = Laporan::insertSolution($conn, $dataMap);
+        if(isset($data["id_sparepart"])) {
+            $sparepart = $data["id_sparepart"];
+            $qty = $data["qty"];
+            for ($i=0; $i < count($sparepart) ; $i++) {
+                $existingSparepart = Sparepart::findById($conn, $sparepart[$i]);
+                if(isset($existingSparepart) && $existingSparepart["jumlah_sp"] >= $qty[$i]) {
+                    $updateSparepartSuccess = Sparepart::updateStok($conn, $sparepart[$i], $existingSparepart["jumlah_sp"] - $qty[$i]);
+                    if($updateSparepartSuccess) {
+                        KerusakanSparepart::insert($conn, $data["id_rusak"], $sparepart[$i], $qty[$i]);
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Delete kerusakan
+     * @param {mysqli | boolean} conn
+     * @param {integer} $idRusak
+     */
+    static public function delete($conn, $idRusak) {
+        $existing = Laporan::findById($conn, $idRusak);
+        if(!$existing) {
+            return false;
+        }   
+
+        $dataIsDeleted = Laporan::delete($conn, $idRusak);
+        if($dataIsDeleted) {
+            unlink($existing["foto"]);
+        }
+
+        return true;
     }
 }

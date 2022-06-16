@@ -36,7 +36,8 @@
   }
 
   $(document).ready( function () {
-    $('#myTable').DataTable();
+    $('#myTable')?.DataTable();
+    $('#myTable2')?.DataTable();
   } );
 </script>
 <script>
@@ -64,21 +65,39 @@
           url: `api/kerusakan.php?id_rusak=${idRusak}`
         })
 
-        const {data} = result;
+        const sparepart = await axios({
+          method: 'get',
+          url: `api/sparepart_kerusakan.php?id_rusak=${idRusak}`
+        })
 
+        const {data: dataSparepart} = sparepart
+        const {data} = result;
+        
         const namaPeminjam = document.getElementById("namaPeminjam");
         const nim = document.getElementById("nim");
         const noRuangan = document.getElementById("noRuangan");
         const detail = document.getElementById("detail_kerusakan");
         const idRusakField = document.getElementById("id_rusak");
         const detailPerbaikanInput = document.getElementById("detail_perbaikan_input");
+        const inUseSparepart = document.getElementById("in-use-sparepart");
 
+        inUseSparepart.firstChild.remove()
         namaPeminjam.value = data.nama;
         nim.value = data.nim;
         noRuangan.value = data.no_ruangan;
         detail.innerHTML = data.detail_rusak;
         idRusakField.value = data.id_rusak
         detailPerbaikanInput.value = data.detail_perbaikan
+
+        dataSparepart.forEach(data => {
+          const tr = `
+            <tr>
+              <td>${data.nama_sp}</td>
+              <td>${data.jumlah}</td>
+            </tr>
+          `
+          inUseSparepart.innerHTML += tr
+        })
       })
     })
 </script>
@@ -170,6 +189,62 @@
         </tr>
       `
       tbody.innerHTML += row;
+    })
+  })
+</script>
+
+<script>
+  function remove(target) {
+    document.getElementById(`row-${target}`).remove()
+  }
+
+  function append(data, current) {
+    const parent = document.getElementById("sparepart");
+    let el = ``;
+    data.forEach(d => {
+      el += `
+        <option value="${d.id_alat}">${d.nama_sp}</option>
+      `
+    })
+    const select = `
+      <div class="row" id="row-${current}">
+        <div class="col-md-8">
+          <select name="id_sparepart[]" class='form-control mt-2'>${el}</select>
+        </div>
+        <div class="col-md-2">
+          <input type="number" class="form-control mt-2" name="qty[]">
+        </div>
+        <div class="col-md-1">
+          <a class="btn btn-danger btn-sm text-white mt-2" onclick="remove(${current})"><i class="fa fa-minus"></i></a>
+        </div>
+      </div>
+    `
+    parent.innerHTML += select
+  }
+
+  async function getSparepart() {
+    const res = await axios({
+      method: "get",
+      url: "api/sparepart.php"
+    })
+
+    return res
+  }
+
+  getSparepart()
+  .then(res => {
+    const { data } = res
+
+    const btnTambah = document.getElementById("tambah-sparepart")
+    const rmBtns = null;
+    let current = 1;
+
+    append(data, current)
+
+    btnTambah .addEventListener("click", e => {
+      e.preventDefault()
+      current+=1
+      append(data, current)
     })
   })
 </script>
