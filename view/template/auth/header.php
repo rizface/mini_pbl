@@ -12,4 +12,4 @@
 	<link rel="stylesheet" href="./assets/auth/css/style.css">
 
 </head>
-<body class="img js-fullheight" style="background-image: url(./assets/auth/images/bg.jpg);">
+<body class="img js-fullheight" style="background-image: url(https://www.polibatam.ac.id/wp-content/uploads/2021/09/poltek-hanggar.jpg);background-size:cover">

@@ -27,7 +27,6 @@
                         <a href="#" class="text-secondary logo">
                             <i class="fa fa-rocket"></i> 
                                 Selamat Datang
-                            <span class="small">admin</span>
                         </a>
                     </h3>
                 </div>

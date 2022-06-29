@@ -28,13 +28,13 @@ class Pengajuan {
      * @param {string} jam
      * @return {boolean} 
      */
-    public static function create($conn, $idMahasiswa, $ruangan, $dosen, $tanggal, $jam) {
+    public static function create($conn, $idMahasiswa, $ruangan, $dosen, $tanggal, $jam, $selesai) {
         $query = "
             INSERT INTO peminjam (
-                id_mahasiswa, id_ruangan, id_dosen, tanggal_pinjam, waktu_pinjam
+                id_mahasiswa, id_ruangan, id_dosen, tanggal_pinjam, waktu_pinjam, waktu_balik
             )
             VALUES(
-                $idMahasiswa, $ruangan, $dosen, '$tanggal', '$jam'      
+                $idMahasiswa, $ruangan, $dosen, '$tanggal', '$jam', '$selesai'      
             )
         ";
 

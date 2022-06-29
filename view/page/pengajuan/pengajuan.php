@@ -104,6 +104,12 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="control-label col-sm-2" for="input-6">Jam Selesai</label>
+                            <div class="col-sm-10">
+                                <input name="jam-selesai" type="time" class="form-control" id="input-6" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <div class="col-sm-10">
                                 <button name="submit" type="submit" class="btn btn-dark">Submit</button>
                             </div>

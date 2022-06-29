@@ -4,7 +4,11 @@
             <div class="avatar text-center">
                 <img src="./assets/general/img/poltek.png" alt="" class="rounded-circle" />
                 <p><strong>Politeknik Negeri Batam</strong></p>
-                <span class="text-primary small"><strong>Mahasiswa</strong></span>
+                <span class="text-primary small">
+                    <strong style="text-transform: capitalize;">
+                        <?= $_SESSION["level"] ?>
+                    </strong>
+                </span>
             </div>
             <!--Image Avatar-->
 
@@ -67,12 +71,6 @@
                                         </a>
                                     </li>
                                     <li class="child">
-                                        <a href="pengajuan.html" class="ml-4">
-                                        <i class="fa fa-angle-right mr-2"></i>
-                                            Pengajuan
-                                        </a>
-                                    </li>
-                                    <li class="child">
                                         <a href="?p=list-kerusakan" class="ml-4">
                                         <i class="fa fa-angle-right mr-2"></i>
                                             Kerusakan
@@ -82,6 +80,12 @@
                                         <a href="?p=peralatan" class="ml-4">
                                             <i class="fa fa-angle-right mr-2"></i>
                                             Peralatan
+                                        </a>
+                                    </li>
+                                    <li class="child">
+                                        <a href="?p=sparepart" class="ml-4">
+                                            <i class="fa fa-angle-right mr-2"></i>
+                                            Sparepart
                                         </a>
                                     </li>
                                 </ul>

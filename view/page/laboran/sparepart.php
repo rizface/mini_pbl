@@ -1,13 +1,15 @@
 <?php
-    $ruangan = RuanganController::findByLaboranId($conn, $_SESSION["id_laboran"]);
-    $peralatan = PeralatanController::findByIdLaboran($conn, $_SESSION["id_laboran"]);
-
+    $sparepart = SparepartController::findAll($conn);
     if(isset($_POST["submit"])) {
-      $success = PeralatanController::insert($conn, $_POST);
+      $data = [
+        "nama" => $_POST["nama_alat"],
+        "jumlah" => $_POST["jumlah"]
+      ];
+      $success = SparepartController::insert($conn, $data);
       if($success) {
-        alert("Peralatan Berhasil Ditambahkan", "?p=peralatan");
+        alert("Data Sparepart Berhasil Ditambahkan");
       } else {
-        alert("Peralatan Gagal Ditambahkan");
+        alert("Data Sparepart Gagal Ditambahkan");
       }
     }
 ?>
@@ -47,14 +49,14 @@
         <?php require("./view/nav/general/nav.php") ?>
       <!--Content right-->
       <div class="col-sm-9 col-xs-12 content pt-3 pl-0">
-        <h5 class="mb-0"><strong>Peralatan Lab</strong></h5>
-        <span class="text-secondary">Data <i class="fa fa-angle-right"></i> Peralatan Lab</span>
+        <h5 class="mb-0"><strong>Sparepart Peralatan Lab</strong></h5>
+        <span class="text-secondary">Data <i class="fa fa-angle-right"></i>Sparepart Peralatan Lab</span>
 
         <div class="row mt-3">
           <div class="col-sm-12">
             <!--Default elements-->
             <div class="mt-1 mb-3 p-3 button-container bg-white border shadow-sm">
-                <h6 class="mb-2">Penambahan Alat Lab</h6>
+                <h6 class="mb-2">Penambahan Sparepart Alat Lab</h6>
                 <form action="" method="post" class="form-horizontal mt-4 mb-5">
                     <div class="form-group row">
                         <label class="control-label col-sm-2" for="input-3">Nama Sparepart</label>
@@ -66,16 +68,6 @@
                         <label class="control-label col-sm-2" for="input-3">Jumlah</label>
                         <div class="col-sm-10">
                             <input required name="jumlah" type="number" id="input-4" class="form-control" placeholder="Masukkan Jumlah" />
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="control-label col-sm-2" for="input-3">Ruangan</label>
-                        <div class="col-sm-10">
-                            <select name="ruangan" class="form-control">
-                              <?php foreach($ruangan as $r)  :?>
-                                <option value="<?= $r["id_ruangan"] ?>">Ruang <?= $r["no_ruangan"] ?></option>
-                              <?php endforeach ?>
-                            </select>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -91,29 +83,27 @@
                       <th>No</th>
                       <th>Nama</th>
                       <th>Jumlah</th>
-                      <th>Ruangan</th>
                       <th>Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <?php foreach($peralatan as $p)  :?>
-                      <tr id="row-<?= $p["id_alat"]; ?>">
-                        <td><?= $p["no"] ?></td>
-                        <td><?= $p["nama_alat"] ?></td>
-                        <td id="jumlah-<?= $p["id_alat"] ?>"><?= $p["jumlah"] ?></td>
-                        <td>Ruang <?= $p["ruangan"] ?></td>
-                        <td>
-                          <a id="tambahStok" data-id-alat=<?= $p["id_alat"] ?> class="btn btn-primary btn-sm">
-                              <i data-id-alat=<?= $p["id_alat"] ?> class="fa fa-plus text-white"></i>
-                          </a>
-                          <a id="kurangStok" data-id-alat=<?= $p["id_alat"] ?> class="btn btn-danger btn-sm">
-                              <i data-id-alat=<?= $p["id_alat"] ?> class="fa fa-minus text-white"></i>
-                          </a>
-                          <a id="hapusAlat" data-id-alat=<?= $p["id_alat"] ?> class="btn btn-success btn-sm">
-                              <i data-id-alat=<?= $p["id_alat"] ?> class="fa fa-trash text-white"></i>
-                          </a>
-                        </td>
-                      </tr>
+                    <?php foreach($sparepart as $s) : ?>
+                        <tr id="row-<?= $s['id'] ?>">
+                            <td><?= $s["no"] ?></td>
+                            <td><?= $s["nama"] ?></td>
+                            <td id="count-<?= $s['id'] ?>" ><?= $s["jumlah"] ?></td>
+                            <td>
+                                <a data-id-sparepart="<?= $s["id"]; ?>" id="tambahSparepart" class="btn btn-primary btn-sm">
+                                    <i data-id-sparepart="<?= $s["id"]; ?>" class="fa fa-plus text-white"></i>
+                                </a>
+                                <a data-id-sparepart="<?= $s["id"]; ?>" id="kurangSparepart" class="btn btn-danger btn-sm">
+                                    <i data-id-sparepart="<?= $s["id"]; ?>" class="fa fa-minus text-white"></i>
+                                </a>
+                                <a data-id-sparepart="<?= $s["id"]; ?>" id="hapusSparepart" class="btn btn-success btn-sm">
+                                    <i data-id-sparepart="<?= $s["id"]; ?>" class="fa fa-trash text-white"></i>
+                                </a>
+                            </td>
+                        </tr>
                     <?php endforeach ?>
                   </tbody>
                 </table>

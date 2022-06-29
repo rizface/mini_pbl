@@ -7,13 +7,14 @@ class PengajuanController {
         $ruangan = $data["ruangan"];
         $tanggal = $data["tanggal"];
         $jam = $data["jam"];
+        $selesai = $data["jam-selesai"];
 
         // Check if the submission with the same ruangan, tanggal, and jam is exists;
         $submissionIsExists = Pengajuan::checkIfSubmissionExists($conn, $ruangan, $tanggal, $jam);
         if($submissionIsExists) {
             return false;
         } else {
-            $isSuccess = Pengajuan::create($conn, $idMahasiswa, $ruangan, $dosen, $tanggal, $jam);
+            $isSuccess = Pengajuan::create($conn, $idMahasiswa, $ruangan, $dosen, $tanggal, $jam, $selesai);
             return $isSuccess;
         }
     }

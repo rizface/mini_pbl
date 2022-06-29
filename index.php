@@ -31,6 +31,7 @@ try {
     require("./controller/kerusakan.php");
     require("./controller/ruangan.php");
     require("./controller/peralatan.php");
+    require("./controller/sparepart.php");
 
     // Create Connection
     $conn = createConnection();
@@ -50,26 +51,29 @@ try {
     if(!isset($p) || $p === "login") {
         require("$page/auth/login.php");
     }else if($p === "mahasiswa") {
-        auth();
+        auth("mahasiswa");
         require("$page/pengajuan/pengajuan.php");
     } else if($p === "papan-informasi") {
-        auth();
+        auth("mahasiswa");
         require("$page/pengajuan/informasi.php");
     } else if($p === "lapor-kerusakan") {
-        auth();
+        auth("mahasiswa");
         require("$page/pengajuan/lapor_kerusakan.php");
     } else if($p === "dosen") {
-        auth();
+        auth("dosen");
         require("$page/dosen/index.php");
     } else if($p === "laboran") {
-        auth();
+        auth("laboran");
         require("$page/laboran/index.php");
     } else if($p === "list-kerusakan") {
-        auth();
+        auth("laboran");
         require("$page/laboran/kerusakan.php");
     } else if($p === "peralatan") {
-        auth();
+        auth("laboran");
         require("$page/laboran/peralatan.php");
+    } else if($p === "sparepart") {
+        auth("laboran");
+        require("$page/laboran/sparepart.php");
     } else if($p === "logout") {
         auth();
         session_destroy();

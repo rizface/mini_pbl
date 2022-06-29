@@ -69,10 +69,7 @@ class KerusakanController {
             for ($i=0; $i < count($sparepart) ; $i++) {
                 $existingSparepart = Sparepart::findById($conn, $sparepart[$i]);
                 if(isset($existingSparepart) && $existingSparepart["jumlah_sp"] >= $qty[$i]) {
-                    $updateSparepartSuccess = Sparepart::updateStok($conn, $sparepart[$i], $existingSparepart["jumlah_sp"] - $qty[$i]);
-                    if($updateSparepartSuccess) {
-                        KerusakanSparepart::insert($conn, $data["id_rusak"], $sparepart[$i], $qty[$i]);
-                    }
+                    KerusakanSparepart::insert($conn, $data["id_rusak"], $sparepart[$i], $qty[$i]);
                 }
             }
         }

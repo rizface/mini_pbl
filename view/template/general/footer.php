@@ -40,18 +40,19 @@
     $('#myTable2')?.DataTable();
   } );
 </script>
+
 <script>
   function toggle_sidebar() {
-    document.getElementById("form_element").style.display = "none";
-    $('#sidebar-toggle-btn').toggleClass('slide-in');
-    $('.sidebar').toggleClass('shrink-sidebar');
-    $('.content').toggleClass('expand-content');
-    
-    //Resize inline dashboard charts
-    $('#incomeBar canvas').css("width","100%");
-    $('#expensesBar canvas').css("width","100%");
-    $('#profitBar canvas').css("width","100%");
-}
+      document.getElementById("form_element").style.display = "none";
+      $('#sidebar-toggle-btn').toggleClass('slide-in');
+      $('.sidebar').toggleClass('shrink-sidebar');
+      $('.content').toggleClass('expand-content');
+      
+      //Resize inline dashboard charts
+      $('#incomeBar canvas').css("width","100%");
+      $('#expensesBar canvas').css("width","100%");
+      $('#profitBar canvas').css("width","100%");
+  }
 </script>
 
 <script>
@@ -170,27 +171,29 @@
 
 <script>
   const btn = document.getElementById("cek-alat");
-  btn.addEventListener("click", async(e) => {
-    const tbody = document.getElementById("list-alat");
-    tbody.innerHTML = "";
+  if(btn) {
+    btn.addEventListener("click", async(e) => {
+      const tbody = document.getElementById("list-alat");
+      tbody.innerHTML = "";
 
-    const idRuangan = document.getElementById("ruangan").value
-    const res = await axios({
-      method: "get",
-      url: `api/peralatan-get.php?id_ruangan=${idRuangan}`
-    })
-    const {data} = res;
+      const idRuangan = document.getElementById("ruangan").value
+      const res = await axios({
+        method: "get",
+        url: `api/peralatan-get.php?id_ruangan=${idRuangan}`
+      })
+      const {data} = res;
 
-    data.forEach(d => {
-      const row = `
-        <tr>
-          <td>${d.nama_alat}</td>
-          <td>${d.jumlah}</td>
-        </tr>
-      `
-      tbody.innerHTML += row;
+      data.forEach(d => {
+        const row = `
+          <tr>
+            <td>${d.nama_alat}</td>
+            <td>${d.jumlah}</td>
+          </tr>
+        `
+        tbody.innerHTML += row;
+      })
     })
-  })
+  }
 </script>
 
 <script>
@@ -200,26 +203,28 @@
 
   function append(data, current) {
     const parent = document.getElementById("sparepart");
-    let el = ``;
-    data.forEach(d => {
-      el += `
-        <option value="${d.id_alat}">${d.nama_sp}</option>
+      if(parent) {
+        let el = ``;
+      data.forEach(d => {
+        el += `
+          <option value="${d.id_sparepart}">${d.nama_sp}</option>
+        `
+      })
+      const select = `
+        <div class="row" id="row-${current}">
+          <div class="col-md-8">
+            <select name="id_sparepart[]" class='form-control mt-2'>${el}</select>
+          </div>
+          <div class="col-md-2">
+            <input type="number" class="form-control mt-2" name="qty[]">
+          </div>
+          <div class="col-md-1">
+            <a class="btn btn-danger btn-sm text-white mt-2" onclick="remove(${current})"><i class="fa fa-minus"></i></a>
+          </div>
+        </div>
       `
-    })
-    const select = `
-      <div class="row" id="row-${current}">
-        <div class="col-md-8">
-          <select name="id_sparepart[]" class='form-control mt-2'>${el}</select>
-        </div>
-        <div class="col-md-2">
-          <input type="number" class="form-control mt-2" name="qty[]">
-        </div>
-        <div class="col-md-1">
-          <a class="btn btn-danger btn-sm text-white mt-2" onclick="remove(${current})"><i class="fa fa-minus"></i></a>
-        </div>
-      </div>
-    `
-    parent.innerHTML += select
+      parent.innerHTML += select
+    }
   }
 
   async function getSparepart() {
@@ -227,7 +232,6 @@
       method: "get",
       url: "api/sparepart.php"
     })
-
     return res
   }
 
@@ -241,13 +245,80 @@
 
     append(data, current)
 
-    btnTambah .addEventListener("click", e => {
-      e.preventDefault()
-      current+=1
-      append(data, current)
+    if(btnTambah) {
+      btnTambah .addEventListener("click", e => {
+        e.preventDefault()
+        current+=1
+        append(data, current)
+      })
+    }
+  })
+</script>
+
+<script>
+  const btnHapus = document.querySelectorAll("#hapusSparepart");
+  const btnKurang = document.querySelectorAll("#kurangSparepart");
+  const btnTambah = document.querySelectorAll("#tambahSparepart");
+
+  async function updateSparepartStok(props) {
+      const result = await axios({
+        url: "api/sparepart-update.php",
+        method: "post",
+        data: props
+      })
+      const {data:{success}} = result;
+      if(success && props.jumlah > 0) {
+        const current = document.getElementById(`count-${props.idSparepart}`)
+        current.innerText = props.jumlah
+      } else if(success && props.jumlah < 1) {
+        document.getElementById(`row-${props.idSparepart}`).remove()
+      }
+  }
+
+  btnTambah.forEach(btn => {
+    btn.addEventListener("click", async(e) => {
+      const {idSparepart} = e.target.dataset;
+      const data = document.getElementById(`count-${idSparepart}`);
+      const newStok = parseInt(data.innerText) + 1
+      
+      const success = await updateSparepartStok({
+        idSparepart,
+        jumlah: newStok
+      })
+    })
+  })
+
+  btnKurang.forEach(btn => {
+    btn.addEventListener("click", async(e) => {
+      const {idSparepart} = e.target.dataset;
+      const data = document.getElementById(`count-${idSparepart}`);
+      const newStok = parseInt(data.innerText) - 1
+
+      const success = await updateSparepartStok({
+        idSparepart,
+        jumlah: newStok
+      })
+    })
+  })
+
+  btnHapus.forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      const {idSparepart} = e.target.dataset;
+      const result = await axios({
+        url: "api/sparepart-hapus.php",
+        method: "post",
+        data: {
+          idSparepart
+        }
+      })
+      
+      const {data:{success}} = result
+      if(success) {
+        document.getElementById(`row-${idSparepart}`).remove()
+      }
     })
   })
 </script>
-</body>
 
+</body>
 </html>
