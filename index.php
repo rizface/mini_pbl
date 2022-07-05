@@ -2,7 +2,7 @@
 try {
     session_start();
 
-    $p = $_GET["p"];
+    $p = isset($_GET["p"]) ? $_GET["p"] : "login";
     $page = "./view/page";
 
     // Load Middleware
@@ -43,6 +43,8 @@ try {
     }
 } catch (\Throwable $th) {
     echo $th->getMessage();
+    echo "<br/>";
+    echo $th->getTrace();
 }
 ?>
 

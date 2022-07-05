@@ -117,7 +117,7 @@
                               </div>
                               <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                                 <div class="card-body">
-                                <textarea class="form-control" name="detail_perbaikan" id="detail_perbaikan_input" cols="30" rows="10"></textarea>
+                                <textarea class="form-control" name="detail_perbaikan" id="detail_perbaikan_input" cols="30" rows="10" placeholder="Masukan Langkah Perbaikan Disini"></textarea>
                                 </div>
                               </div>
                           </div>
