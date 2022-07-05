@@ -3,8 +3,8 @@
     $id_dosen = $_SESSION["id_dosen"];
     $pengajuan = PengajuanController::findByDosenId($conn, $id_dosen);
     
-    $idPinjam = $_GET["id_pinjam"];
-    $status = $_GET["status"];
+    $idPinjam = isset($_GET["id_pinjam"]) ? $_GET["id_pinjam"] : null;
+    $status = isset($_GET["status"]) ? $_GET["status"] : null;
     if(isset($idPinjam) && isset($status)) {
         $status = "persetujuan_dosen = '$status'";
         $success = PengajuanController::updateStatus($conn, $idPinjam, $status);
