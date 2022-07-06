@@ -11,7 +11,6 @@
             alert("Login Gagal");
         }
     }
-
 ?>
 
 <section class="ftco-section">

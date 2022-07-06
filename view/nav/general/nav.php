@@ -52,7 +52,7 @@
                         </a>
                         <ul class="children" id="data-pengajuan">
                             <li class="child">
-                                <a href="./" class="ml-4">
+                                <a href="?p=dosen" class="ml-4">
                                     <i class="fa fa-angle-right mr-2"></i> Pengajuan
                                 </a>
                             </li>
