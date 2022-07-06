@@ -7,10 +7,10 @@
       }
     }
 
-    $action = $_GET["action"];
-    $idRusak = $_GET["id_rusak"];
+    $action = isset($_GET["action"]) ? $_GET["action"] : null;
+    $idRusak = isset($_GET["id_rusak"]) ? $_GET["id_rusak"] : null;
 
-    if(isset($action) && $action === "delete" && isset($idRusak)) {
+    if($action !== null && $action === "delete" && $idRusak !== null) {
       $success = KerusakanController::delete($conn, $idRusak);
       if($success) {
         alert("Laporan Kerusakan Berhasil Dihapus", "?p=list-kerusakan");
