@@ -33,7 +33,7 @@ class PengajuanController {
             array_push($pengajuan,[
                 "id_pinjam" => $t["id_pinjam"],
                 "nim" => $t["nim"],
-                "peminjam" => $t["nama"],
+                "peminjam" => $t["nama_mahasiswa"],
                 "no_ruangan" => $t["no_ruangan"],
                 "dosen" => $t["nama_dosen"],
                 "mahasiswa" => $t["nama_mahasiswa"],
